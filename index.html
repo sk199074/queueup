@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Access-Control-Allow-Origin" content="">
+		<meta http-equiv="content-security-policy">
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/index.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="beijing">
+			<div id="biaoti">
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<label id="zhenshi">XXX</label>
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<label id="shequ">XXX</label>
+				<br />
+				<br />
+			</div>
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<a id="haoma" href="setting.html">无</a>
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<label id="mingzi">XXX</label>
+		</div>
+		<script>
+			mui.init();
+			mui.plusReady(function() {
+				plus.device.setWakelock(true);
+			});
+			window.setInterval(Refresh, 1000);
+
+			function Refresh() {
+				var key = localStorage.getItem("key");
+				var name = localStorage.getItem("name");
+				var yljg = localStorage.getItem("yljg");
+				var url = "http://" + localStorage.getItem("url") + "/api/Takeno";
+				document.getElementById("zhenshi").innerText = name;
+				document.getElementById("shequ").innerText = yljg;
+				mui.getJSON(url, {
+						id: key
+					},
+					function(data) {
+						if (data != null) {
+							var code = data['queue_takeno_code'];
+							var type = data['queue_type'];
+							var index = type == 1 ? 4 : 5;
+							var haoma = code.substring(0, index);
+							var mingzi = code.substring(index, code.length);
+							document.getElementById("haoma").innerText = haoma;
+							document.getElementById("mingzi").innerText = mingzi;
+						}
+					}
+				);
+				var exitUrl = "http://" + localStorage.getItem("url") + "/api/Test";
+				mui.getJSON(exitUrl, {
+						id: 1
+					},
+					function(data) {
+						var code = data;
+						if (code == 'true') {
+							mui.plusReady(function() {
+								plus.runtime.quit();
+							});
+						}
+					}
+				);
+			}
+		</script>
+	</body>
+
+</html>
